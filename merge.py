@@ -37,15 +37,11 @@ def merge ( partial , P , oracle , e , m , n , verbose = 0 ) :
 
 			if verbose >= 2 : callback( "A_m > B_n with probability < 1/3" )
 
-			t = 1
-
-			while partial( i - 1 , t - 1 ) > 0 : t += 1
-
-			r = t
+			r = j - 1
 
 			# By Linial's theorem we are guaranteed to break out this loop.
 
-			while not e[i][j] <= 3 * e[i][r-1] <= 2 * e[i][j] : r += 1
+			while not e[i][j] <= 3 * e[i][r-1] <= 2 * e[i][j] : r -= 1
 
 			if oracle( i - 1 , r - 1 ) < 0 :
 
@@ -55,29 +51,22 @@ def merge ( partial , P , oracle , e , m , n , verbose = 0 ) :
 
 			else :
 
-				while t <= r :
-					P[i-1][t-1] = 1 # update partial information
-					e[i][t] = e[i-1][t] # update lin. ext. count
-					t += 1
+				P[i-1][r-1] = 1 # update partial information
 
-				while t <= j :
-					e[i][t] = e[i-1][t] # update lin. ext. count
-					t += 1
+				while r <= j :
+					e[i][r] = e[i-1][r] # update lin. ext. count
+					r += 1
 
 		# e(P(A_m < B_n)) / e(P) < 1/3
 		elif 3 * e[i][j-1] < e[i][j] :
 
 			if verbose >= 2 : callback( "A_m < B_n with probability < 1/3" )
 
-			t = 1
-
-			while partial( t - 1 , j - 1 ) < 0 : t += 1
-
-			r = t
+			r = i - 1
 
 			# By Linial's theorem we are guaranteed to break out this loop.
 
-			while not e[i][j] <= 3 * e[r-1][j] <= 2 * e[i][j] : r += 1
+			while not e[i][j] <= 3 * e[r-1][j] <= 2 * e[i][j] : r -= 1
 
 			if oracle( r - 1 , j - 1 ) > 0 :
 
@@ -87,14 +76,11 @@ def merge ( partial , P , oracle , e , m , n , verbose = 0 ) :
 
 			else :
 
-				while t <= r :
-					P[t-1][j-1] = -1 # update partial information
-					e[t][j] = e[t][j-1] # update lin. ext. count
-					t += 1
+				P[r-1][j-1] = -1 # update partial information
 
-				while t <= i :
-					e[t][j] = e[t][j-1] # update lin. ext. count
-					t += 1
+				while r <= i :
+					e[r][j] = e[r][j-1] # update lin. ext. count
+					r += 1
 
 		else :
 
