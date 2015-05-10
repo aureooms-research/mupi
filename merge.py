@@ -52,9 +52,11 @@ def merge ( partial , P , oracle , e , m , n , verbose = 0 ) :
 			else :
 
 				P[i-1][r-1] = 1 # update partial information
+				e[i][r] = e[i-1][r] # update lin. ext. count
 
+				r += 1
 				while r <= j :
-					e[i][r] = e[i-1][r] # update lin. ext. count
+					e[i][r] = e[i-1][r] + e[i][r-1] # update lin. ext. count
 					r += 1
 
 		# e(P(A_m < B_n)) / e(P) < 1/3
@@ -77,9 +79,11 @@ def merge ( partial , P , oracle , e , m , n , verbose = 0 ) :
 			else :
 
 				P[r-1][j-1] = -1 # update partial information
+				e[r][j] = e[r][j-1] # update lin. ext. count
 
+				r += 1
 				while r <= i :
-					e[r][j] = e[r][j-1] # update lin. ext. count
+					e[r][j] = e[r][j-1] + e[r-1][j] # update lin. ext. count
 					r += 1
 
 		else :
