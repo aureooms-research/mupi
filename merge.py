@@ -135,17 +135,27 @@ def main ( partial , total , verbose ) :
 
 	e = tableau( partial , m , n )
 
-	ITLB = log( e[m][n] , 2 )
+	eP = e[m][n]
+
+	ITLB = log( eP , 2 )
+
+	UB = ITLB / log((1+5**(1/2))/2,2)
 
 	print( *list( reversed( list( merge( partial , P , oracle , e , m , n , verbose ) ) ) ) , sep = " < " )
 
 	if verbose :
 
-		print( "total queries :" , len( oracle ) )
+		print( "e(P) :" , eP )
 
-		print( "n / ITLB :" , len( oracle ) / ITLB )
+		print( "ITLB :" , ITLB )
 
-		print( "n / 1.44.. ITLB :" , len( oracle ) / ITLB * log((1+5**(1/2))/2,2) )
+		print( "UB = 1.44.. ITLB :" , UB )
+
+		print( "N = total queries :" , len( oracle ) )
+
+		print( "N / ITLB :" , len( oracle ) / ITLB )
+
+		print( "N / UB :" , len( oracle ) / UB )
 
 
 if __name__ == "__main__" :
